@@ -1,5 +1,6 @@
 package com.example.sudokusolver;
 
+import android.graphics.Color;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,9 +19,18 @@ public class SudokuSolver {
 
     private final Map<Integer, List<Integer>> possibleNumbersMap = new HashMap<>();
 
-    public SudokuSolver(int[][] sudoku, Map<String, TextView> textViewMap) {
+	private boolean allowGuessing = false;
+
+	private boolean stepByStepExec = false;
+
+	private TextView noteText;
+
+    public SudokuSolver(int[][] sudoku, Map<String, TextView> textViewMap, boolean allowGuessing, boolean stepByStepExec, TextView noteText) {
         this.sudoku = sudoku;
         this.textViewMap = textViewMap;
+		this.allowGuessing = allowGuessing;
+		this.stepByStepExec = stepByStepExec;
+		this.noteText = noteText;
     }
 
 
@@ -37,14 +47,15 @@ public class SudokuSolver {
 
     public void solveSudoku() {
 		int count = 1;
-		boolean guessValue = false;
-
+		//boolean guessValue = false;
+		int retryWithoutUpdateCount = 0;
+		boolean foundUpdate = false;
 		do {
 			printSudoku();
-			guessValue = false;
+			//guessValue = false;
 			System.out.println("Count : " + count+++" : "+possibleNumbersMap);
 			String insertedData = "";
-			boolean foundUpdate = false;
+			foundUpdate = false;
 			for (int i = 0; i < size; i++) {
 				for (int j = 0; j < size; j++) {
 					List<Integer> possibility = new ArrayList<>();
@@ -54,6 +65,7 @@ public class SudokuSolver {
 						System.out.println("break");
 					}
 					if (sudoku[i][j] == 0) {
+						String msg = "";
 						for (int num = 1; num < 10; num++) {
 							if (validateNumber(num, i, j)) {
 								possibility.add(num);
@@ -61,7 +73,9 @@ public class SudokuSolver {
 						}
 
 						if (possibility.size() > 1) {
-							validateNumberPossibility(possibility, i, j);
+							msg = validateNumberPossibility(possibility, i, j);
+						} else {
+							msg = "Single posiibility found.";
 						}
 						if (possibility.size() == 1) {
 							foundUpdate = true;
@@ -69,9 +83,16 @@ public class SudokuSolver {
 							textViewMap.get("f"+i+""+j).setText(sudoku[i][j]+"");
 							possibleNumbersMap.remove(possibilityIndex);
 							insertedData = insertedData + i + ":" + j + "=" + possibility.get(0) + ", ";
+							noteText.setText(msg);
+							if(stepByStepExec) {
+								textViewMap.get("f"+i+""+j).setTextColor(Color.GREEN);
+								return;
+							}
 						} else {
 							if(possibility.isEmpty()) {
-								System.out.println("Error : "+i+":"+j+":"+possibleNumbersMap);
+								String errorMsg = "Error : "+i+":"+j+":"+possibleNumbersMap;
+								System.out.println(errorMsg);
+								noteText.setText(errorMsg);
 								return;
 							}
 							possibleNumbersMap.put(possibilityIndex, possibility);
@@ -79,15 +100,28 @@ public class SudokuSolver {
 					}
 				}
 			}
-			System.out.println("InsertedData : "+insertedData);
-
-			if (!foundUpdate) {
+			if(!insertedData.isEmpty()) {
+				System.out.println("InsertedData : "+insertedData);
+			}
+			if(foundUpdate) {
+				retryWithoutUpdateCount = 0;
+			} else {
+				retryWithoutUpdateCount++;
+			}
+			if (!foundUpdate && allowGuessing) {
 				System.out.println("------------Update not found : ");
 				guessOneValue();
-				guessValue = true;
+				//guessValue = true;
+				foundUpdate = true;
+				retryWithoutUpdateCount = 0;
 			}
-		} while (guessValue || !possibleNumbersMap.isEmpty());
 
+		} while ((foundUpdate || retryWithoutUpdateCount < 2) && !possibleNumbersMap.isEmpty());
+		if(possibleNumbersMap.isEmpty()) {
+			noteText.setText("Solved");
+		} else {
+			noteText.setText("Not solved : "+possibleNumbersMap);
+		}
 		System.out.println(possibleNumbersMap);
 	}
 
@@ -115,7 +149,9 @@ public class SudokuSolver {
 		}
 		
 		sudoku[minPossibilityI][minPossibilityJ] = possibleNumbersMap.get(minPossibilityGuessIndex).get(0);
-		textViewMap.get("f"+minPossibilityI+""+minPossibilityJ).setText(sudoku[minPossibilityI][minPossibilityJ]+"");
+		TextView textView = textViewMap.get("f"+minPossibilityI+""+minPossibilityJ);
+		textView.setText(sudoku[minPossibilityI][minPossibilityJ]+"");
+		textView.setTextColor(Color.YELLOW);
 		System.out.println(" value Guess " + minPossibilityI + ":" + minPossibilityJ + "=" + sudoku[minPossibilityI][minPossibilityJ]);
 		removeGuessValueFromOthersPossibility(minPossibilityI, minPossibilityJ, sudoku[minPossibilityI][minPossibilityJ]);
 		possibleNumbersMap.remove(minPossibilityGuessIndex);
@@ -182,7 +218,7 @@ public class SudokuSolver {
 		return isValid;
 	}
 
-	private void validateNumberPossibility(List<Integer> possibleNumbers, int raw, int col) {
+	private String validateNumberPossibility(List<Integer> possibleNumbers, int raw, int col) {
 
 		// Check raw wise
 		List<Integer> uniqueuPossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
@@ -193,7 +229,7 @@ public class SudokuSolver {
 			if (sudoku[i][col] == 0 && i != raw) {
 				List<Integer> list = possibleNumbersMap.get(generateIndex(i, col));
 				if (list == null) {
-					return;
+					return "Raw wise Possibility is not set for raw : "+i+", col : "+col;
 				}
 				for (Integer possibleNum : uniqueuPossibleNumbers) {
 					if (list.contains(possibleNum)) {
@@ -205,7 +241,7 @@ public class SudokuSolver {
 		if (uniqueuPossibleNumbers.size() == 1) {
 			possibleNumbers.clear();
 			possibleNumbers.add(uniqueuPossibleNumbers.get(0));
-			return;
+			return "Raw wise Unique possibility found";
 		}
 
 		// Check columns wise
@@ -218,7 +254,7 @@ public class SudokuSolver {
 			if (sudoku[raw][i] == 0 && i != col) {
 				List<Integer> list = possibleNumbersMap.get(generateIndex(raw, i));
 				if (list == null) {
-					return;
+					return "Column wise Possibility is not set for raw : "+raw+", col : "+i;
 				}
 				for (Integer possibleNum : uniqueuPossibleNumbers) {
 					if (list.contains(possibleNum)) {
@@ -230,7 +266,7 @@ public class SudokuSolver {
 		if (uniqueuPossibleNumbers.size() == 1) {
 			possibleNumbers.clear();
 			possibleNumbers.add(uniqueuPossibleNumbers.get(0));
-			return;
+			return "Column wise Unique possibility found";
 		}
 
 		// Check Block wise
@@ -247,7 +283,7 @@ public class SudokuSolver {
 				if ((rawBoxIndex + i) != raw || (colBoxIndex + j) != col) {
 					List<Integer> list = possibleNumbersMap.get(generateIndex(rawBoxIndex + i, colBoxIndex + j));
 					if (list == null) {
-						return;
+						return "Block wise Possibility is not set for raw : "+(rawBoxIndex+i)+", col : "+(colBoxIndex+j);
 					}
 					for (Integer possibleNum : uniqueuPossibleNumbers) {
 						if (list.contains(possibleNum)) {
@@ -261,9 +297,9 @@ public class SudokuSolver {
 		if (uniqueuPossibleNumbers.size() == 1) {
 			possibleNumbers.clear();
 			possibleNumbers.add(uniqueuPossibleNumbers.get(0));
-			return;
+			return "Box wise unique Possibility found";
 		}
-
+		return "";
 	}
 
 	private void printSudoku() {

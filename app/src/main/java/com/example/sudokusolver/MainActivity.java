@@ -2,9 +2,12 @@ package com.example.sudokusolver;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -14,29 +17,79 @@ public class MainActivity extends AppCompatActivity {
 
     private final Map<String, TextView> textViewMap = new HashMap<>();
 
+    private int[][] savedSudoku = new int[9][9];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTextViewMap();
-        Button solveButton = findViewById(R.id.solveButton);
-        solveButton.setOnClickListener(new View.OnClickListener() {
+
+        Switch allowGuessSwitch = findViewById(R.id.allowGuess);
+        Switch stepByStepExecSwitch = findViewById(R.id.stepByStepExec);
+
+        TextView noteText = findViewById(R.id.textNote);
+
+
+        View.OnClickListener solveListner = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int[][] sudoku = new int[9][9];
+                int[][] sudoku = fetchSudokuData();
+
+                SudokuSolver solver = new SudokuSolver(sudoku,textViewMap, allowGuessSwitch.isChecked(), stepByStepExecSwitch.isChecked(), noteText);
+                solver.solveSudoku();
+            }
+        };
+        Button solveButton = findViewById(R.id.solveButton);
+        solveButton.setOnClickListener(solveListner);
+        Button nextButton = findViewById(R.id.next);
+        nextButton.setOnClickListener(solveListner);
+
+        Button saveButton = findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                savedSudoku = fetchSudokuData();
+            }
+        });
+        Button resetButton = findViewById(R.id.resetButton);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 for(int i=0; i<9;i++) {
                     for(int j=0; j<9; j++) {
-                        final CharSequence data = textViewMap.get("f"+i+""+j).getText();
-                        if(data != null && data.length()>0) {
-                            System.out.println("Data is set : "+i+":"+j+"="+data);
-                            sudoku[i][j] = Integer.parseInt(data.toString());
+                        TextView textView = textViewMap.get("f"+i+""+j);
+                        int data = savedSudoku[i][j];
+                        if(data > 0) {
+                            textView.setTextColor(Color.BLUE);
+                            textView.setText(data+"");
+                        } else {
+                            textView.setText("");
+                            textView.setTextColor(Color.WHITE);
                         }
                     }
                 }
-                SudokuSolver solver = new SudokuSolver(sudoku,textViewMap);
-                solver.solveSudoku();
+                noteText.setText("");
             }
         });
+
+    }
+
+    private int[][] fetchSudokuData() {
+        int[][] sudokuData = new int[9][9];
+        for(int i=0; i<9;i++) {
+            for(int j=0; j<9; j++) {
+                TextView textView = textViewMap.get("f"+i+""+j);
+                textView.setTextColor(Color.WHITE);
+                final CharSequence data = textView.getText();
+                if(data != null && data.length()>0) {
+                    textView.setTextColor(Color.BLUE);
+                    System.out.println("Data is set : "+i+":"+j+"="+data);
+                    sudokuData[i][j] = Integer.parseInt(data.toString());
+                }
+            }
+        }
+        return sudokuData;
     }
 
     private void setTextViewMap() {
