@@ -76,6 +76,12 @@
                 android:paddingRight="4px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f03"
                 android:layout_width="match_parent"
@@ -106,7 +112,11 @@
                 android:padding="2px"
                 android:paddingRight="4px"
                 android:textAlignment="center" />
-
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
             <EditText
                 android:id="@+id/f06"
                 android:layout_width="match_parent"
@@ -174,6 +184,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f13"
                 android:layout_width="match_parent"
@@ -203,6 +219,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f16"
@@ -271,6 +293,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f23"
                 android:layout_width="match_parent"
@@ -300,6 +328,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f26"
@@ -331,6 +365,17 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="--------------------------------------------------------------"
+                android:textAlignment="center" />
         </TableRow>
 
         <TableRow
@@ -368,6 +413,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f33"
                 android:layout_width="match_parent"
@@ -397,6 +448,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f36"
@@ -465,6 +522,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f43"
                 android:layout_width="match_parent"
@@ -494,6 +557,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f46"
@@ -562,6 +631,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f53"
                 android:layout_width="match_parent"
@@ -591,6 +666,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f56"
@@ -622,6 +703,17 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="--------------------------------------------------------------"
+                android:textAlignment="center" />
         </TableRow>
 
         <TableRow
@@ -659,6 +751,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f63"
                 android:layout_width="match_parent"
@@ -688,6 +786,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f66"
@@ -756,6 +860,12 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
+
             <EditText
                 android:id="@+id/f73"
                 android:layout_width="match_parent"
@@ -785,6 +895,12 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+            <TextView
+                android:text="||"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                />
 
             <EditText
                 android:id="@+id/f76"
@@ -853,6 +969,8 @@
                 android:padding="2px"
                 android:textAlignment="center" />
 
+
+
             <EditText
                 android:id="@+id/f83"
                 android:layout_width="match_parent"
@@ -882,6 +1000,8 @@
                 android:inputType="number"
                 android:padding="2px"
                 android:textAlignment="center" />
+
+
 
             <EditText
                 android:id="@+id/f86"
