@@ -75,7 +75,7 @@ public class SudokuSolver {
 						if (possibility.size() > 1) {
 							msg = validateNumberPossibility(possibility, i, j);
 						} else {
-							msg = "Single posiibility found.";
+							msg = "Single possibility found.";
 						}
 						if (possibility.size() == 1) {
 							foundUpdate = true;
@@ -220,10 +220,11 @@ public class SudokuSolver {
 
 	private String validateNumberPossibility(List<Integer> possibleNumbers, int raw, int col) {
 
+    	String msg = "";
 		// Check raw wise
-		List<Integer> uniqueuPossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
+		List<Integer> uniquePossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
 		for (int i = 0; i < size; i++) {
-			if (uniqueuPossibleNumbers.isEmpty()) {
+			if (uniquePossibleNumbers.isEmpty()) {
 				break;
 			}
 			if (sudoku[i][col] == 0 && i != raw) {
@@ -231,23 +232,25 @@ public class SudokuSolver {
 				if (list == null) {
 					return "Raw wise Possibility is not set for raw : "+i+", col : "+col;
 				}
-				for (Integer possibleNum : uniqueuPossibleNumbers) {
+				msg+="\n others raw : "+i+", col : "+col+" :: "+list;
+				for (Integer possibleNum : uniquePossibleNumbers) {
 					if (list.contains(possibleNum)) {
-						uniqueuPossibleNumbers.remove(uniqueuPossibleNumbers.indexOf(possibleNum));
+						uniquePossibleNumbers.remove(uniquePossibleNumbers.indexOf(possibleNum));
 					}
 				}
 			}
 		}
-		if (uniqueuPossibleNumbers.size() == 1) {
+		if (uniquePossibleNumbers.size() == 1) {
+			msg += "\nPossibleNumbers : "+possibleNumbers;
 			possibleNumbers.clear();
-			possibleNumbers.add(uniqueuPossibleNumbers.get(0));
-			return "Raw wise Unique possibility found";
+			possibleNumbers.add(uniquePossibleNumbers.get(0));
+			return "Raw wise Unique possibility found : "+msg;
 		}
-
+		msg = "";
 		// Check columns wise
-		uniqueuPossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
+		uniquePossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
 		for (int i = 0; i < size; i++) {
-			if (uniqueuPossibleNumbers.isEmpty()) {
+			if (uniquePossibleNumbers.isEmpty()) {
 				break;
 			}
 
@@ -256,28 +259,31 @@ public class SudokuSolver {
 				if (list == null) {
 					return "Column wise Possibility is not set for raw : "+raw+", col : "+i;
 				}
-				for (Integer possibleNum : uniqueuPossibleNumbers) {
+				msg+="\n others raw : "+i+", col : "+col+" :: "+list;
+				for (Integer possibleNum : uniquePossibleNumbers) {
 					if (list.contains(possibleNum)) {
-						uniqueuPossibleNumbers.remove(uniqueuPossibleNumbers.indexOf(possibleNum));
+						uniquePossibleNumbers.remove(uniquePossibleNumbers.indexOf(possibleNum));
 					}
 				}
 			}
 		}
-		if (uniqueuPossibleNumbers.size() == 1) {
+		if (uniquePossibleNumbers.size() == 1) {
+			msg += "\nPossibleNumbers : "+possibleNumbers;
 			possibleNumbers.clear();
-			possibleNumbers.add(uniqueuPossibleNumbers.get(0));
-			return "Column wise Unique possibility found";
+			possibleNumbers.add(uniquePossibleNumbers.get(0));
+			return "Column wise Unique possibility found : "+msg;
 		}
 
-		// Check Block wise
+		msg = "";
 
-		uniqueuPossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
+		// Check Block wise
+		uniquePossibleNumbers = new CopyOnWriteArrayList<>(possibleNumbers);
 		int rawBoxIndex = (raw / 3) * 3;
 		int colBoxIndex = (col / 3) * 3;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (uniqueuPossibleNumbers.isEmpty()) {
+				if (uniquePossibleNumbers.isEmpty()) {
 					break;
 				}
 				if ((rawBoxIndex + i) != raw || (colBoxIndex + j) != col) {
@@ -285,19 +291,21 @@ public class SudokuSolver {
 					if (list == null) {
 						return "Block wise Possibility is not set for raw : "+(rawBoxIndex+i)+", col : "+(colBoxIndex+j);
 					}
-					for (Integer possibleNum : uniqueuPossibleNumbers) {
+					msg+="\n others raw : "+(rawBoxIndex+i)+", col : "+(colBoxIndex+j)+" :: "+list;
+					for (Integer possibleNum : uniquePossibleNumbers) {
+						msg += "\nPossibleNumbers : "+possibleNumbers;
 						if (list.contains(possibleNum)) {
-							uniqueuPossibleNumbers.remove(uniqueuPossibleNumbers.indexOf(possibleNum));
+							uniquePossibleNumbers.remove(uniquePossibleNumbers.indexOf(possibleNum));
 						}
 					}
 				}
 			}
 
 		}
-		if (uniqueuPossibleNumbers.size() == 1) {
+		if (uniquePossibleNumbers.size() == 1) {
 			possibleNumbers.clear();
-			possibleNumbers.add(uniqueuPossibleNumbers.get(0));
-			return "Box wise unique Possibility found";
+			possibleNumbers.add(uniquePossibleNumbers.get(0));
+			return "Box wise unique Possibility found : "+msg;
 		}
 		return "";
 	}
