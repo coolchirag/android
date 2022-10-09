@@ -232,7 +232,7 @@ public class SudokuSolver {
 				if (list == null) {
 					return "Raw wise Possibility is not set for raw : "+i+", col : "+col;
 				}
-				msg+="\n others raw : "+i+", col : "+col+" :: "+list;
+				msg+="\n others raw : "+(i+1)+", col : "+(col+1)+" :: "+list;
 				for (Integer possibleNum : uniquePossibleNumbers) {
 					if (list.contains(possibleNum)) {
 						uniquePossibleNumbers.remove(uniquePossibleNumbers.indexOf(possibleNum));
@@ -259,7 +259,7 @@ public class SudokuSolver {
 				if (list == null) {
 					return "Column wise Possibility is not set for raw : "+raw+", col : "+i;
 				}
-				msg+="\n others raw : "+i+", col : "+col+" :: "+list;
+				msg+="\n others raw : "+(raw+1)+", col : "+(i+1)+" :: "+list;
 				for (Integer possibleNum : uniquePossibleNumbers) {
 					if (list.contains(possibleNum)) {
 						uniquePossibleNumbers.remove(uniquePossibleNumbers.indexOf(possibleNum));
@@ -291,7 +291,7 @@ public class SudokuSolver {
 					if (list == null) {
 						return "Block wise Possibility is not set for raw : "+(rawBoxIndex+i)+", col : "+(colBoxIndex+j);
 					}
-					msg+="\n others raw : "+(rawBoxIndex+i)+", col : "+(colBoxIndex+j)+" :: "+list;
+					msg+="\n others raw : "+(rawBoxIndex+i+1)+", col : "+(colBoxIndex+j+1)+" :: "+list;
 					for (Integer possibleNum : uniquePossibleNumbers) {
 						msg += "\nPossibleNumbers : "+possibleNumbers;
 						if (list.contains(possibleNum)) {
